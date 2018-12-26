@@ -5,6 +5,10 @@
 #include<string.h>
 #include<io.h>
 #include<assert.h>
+#include<stdlib.h>
+#include<windows.h>
+#include <unistd.h>
+#include<dirent.h>
 
 #define Max_Instrument 0x1000
 #define Max_Length 0x1000

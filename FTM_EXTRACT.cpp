@@ -6,6 +6,7 @@
 #include "FILE_OUTPUT.h"
 
 char FILE_NAME[Max_Length];
+
 /*void ReadFileString(FILE *fp)
 {
 	long file_size;
@@ -162,12 +163,17 @@ char FTI_NODPCM_END[] = {
 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00 , 0x00
 };
 
-int main(int argc , char *FILE_NAME[])
+int main(int argc , char *FILE_NAME_IN[])
 {
 	assert(argc == 2);
+	strcpy(FOLDER_NAME , FILE_NAME_IN[1]);
+	FOLDER_NAME[GetStringLength(FOLDER_NAME) - 4] = '\0';
+	_mkdir(FOLDER_NAME);
+	opendir(FOLDER_NAME);
 	int i , j;
+	memset(RELATIVE_ROUTE , 0 ,sizeof(RELATIVE_ROUTE));
 	
-    fp = fopen(FILE_NAME[1] , "rb+");
+    fp = fopen(FILE_NAME_IN[1] , "rb+");
 	if(fseek(fp , 0 , SEEK_SET) == 0)
 		fread(FILE_NAME , 1 , 18 , fp);
 	if(memcmp(FILE_NAME , FTM_HEADER , GetStringLength(FTM_HEADER)) != 0)
@@ -237,7 +243,7 @@ int main(int argc , char *FILE_NAME[])
 		
 	for(i = 0 ; i < INSTRUMENT_COUNT ; i++)
 	{
-		wp = fopen(Output_NameGen(Instr_2A03[i].Get_NameString()) , "wb+");
+		wp = fopen(Output_NameGen(Instr_2A03[i].Get_NameString() , i) , "wb+");
 		fwrite(FTI_HEADER , 1 , GetStringLength(FTI_HEADER) , wp);
 		Instr_2A03[i].Write_InstrumentType(wp , FTI_INSTRUMENT_TYPE);
 		Instr_2A03[i].Write_InstrumentNameLength(wp , FTI_NAME_LENGTH);
